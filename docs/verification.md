@@ -1,4 +1,19 @@
-# Verification — October 17, 2026
+# Verification
+
+## Public homepage — October 20, 2026
+
+- Production build and TypeScript checks passed; 9 unit tests and all 11 browser tests passed in Microsoft Edge.
+- Reviewed the homepage at 1440px and 390px. Automated overflow checks also cover 320, 540, 768, and 1024px. Screenshots are `docs/screenshots/home-desktop.png` and `home-mobile.png`.
+- Checked real search navigation, invalid-input handling, demonstration report/network entry, node and keyboard edge selection, expandable evidence, keyboard pan, zoom/reset, mobile relationships, and motion/forced-color preferences.
+- Axe reports no violations in tested states. The initial preview label mismatch was corrected before the passing run.
+- No Cyrillic strings found in `app/`, `components/`, or `lib/`.
+- All 11 protected source files match the saved SHA256 baseline: report, explorer, methodology, root layout, global styles, report/graph components, API, and backend libraries.
+- The only shared-shell change bypasses dashboard chrome on `/`, preserving the existing investigation context.
+- Baseline is recoverable at Git commit `80c6333` and in the separate `backups/homepage-before-public-redesign-20261017.zip` archive.
+
+No live intelligence was added. The example remains synthetic; shared content does not establish common ownership or a threat. Safari, Firefox, and physical-device testing remain unverified.
+
+## Previous full-product verification — October 17, 2026
 
 ## Results
 

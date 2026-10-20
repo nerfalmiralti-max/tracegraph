@@ -1,6 +1,6 @@
 # TraceGraph design direction
 
-Updated October 17, 2026. This is the continuing product direction, superseding the initial Russian UI brief.
+Updated October 20, 2026. The public homepage follows the consumer product direction below; report and explorer retain their existing design.
 
 ## Identity and language
 
@@ -19,7 +19,9 @@ All product copy, errors, metadata, dates, and accessibility labels use English 
 
 ## Product composition
 
-Home combines the domain search, a concise investigation guide, and an interactive fictional example. Selecting a related domain updates its supporting evidence.
+The public homepage has horizontal navigation, a 56px desktop headline, a prominent 760px domain search, and one substantial interactive investigation preview within a 1200px content area. Its architecture is independent of the dashboard shell. Use the exact headline “Know who you're dealing with.” and comfortable 16–18px body copy. Supporting capabilities are unboxed. Avoid redundant eyebrows, decorative effects, or shrinking the experience into dashboard panels.
+
+Homepage styles are isolated in `app/home.module.css` and `components/ui/hero-section.module.css`. The supplied HeroSection is adapted around the existing search and live synthetic preview, without glow or stock imagery. Selection, expandable evidence, pan, zoom, and reset work on the preview; mobile replaces the canvas with a relationship list. Synthetic data is explicitly labeled.
 
 Reports prioritize domain identity, assessment, source coverage, timestamps, related domains, and uncertainty. The assessment facts come from the existing response, never invented scores.
 

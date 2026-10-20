@@ -24,7 +24,7 @@ test("headline wave finishes once, preserves layout, and respects motion and con
     )
     .toBe(200);
   expect(await heading.boundingBox()).toEqual(bounds);
-  await expect(heading).toHaveText("Understand what’s behind a website.");
+  await expect(heading).toHaveText("Know who you're dealing with.");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(heading).toHaveAttribute("data-state", "static");

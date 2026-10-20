@@ -87,6 +87,13 @@ export function Workspace({ children }: { children: ReactNode }) {
       busy.current = false;
     }
   }
+  if (pathname === "/") {
+    return (
+      <Context.Provider value={{ report, loading, error, investigate }}>
+        {children}
+      </Context.Provider>
+    );
+  }
   return (
     <Context.Provider value={{ report, loading, error, investigate }}>
       <a className="skip-link" href="#main">
