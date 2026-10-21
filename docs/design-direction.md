@@ -19,9 +19,9 @@ All product copy, errors, metadata, dates, and accessibility labels use English 
 
 ## Product composition
 
-The public homepage has horizontal navigation, a 56px desktop headline, a prominent 760px domain search, and one substantial interactive investigation preview within a 1200px content area. Its architecture is independent of the dashboard shell. Use the exact headline “Know who you're dealing with.” and comfortable 16–18px body copy. Supporting capabilities are unboxed. Avoid redundant eyebrows, decorative effects, or shrinking the experience into dashboard panels.
+The latest public homepage direction is “Intelligence made visible.” Use an asymmetric editorial hero: search and the headline “See the connections. Question the unknown.” on the left, a meaningful interactive domain graph and contextual evidence on the right. The content area is approximately 1250px. Geist display type is 58px on desktop, with 17px body copy and monospace only for investigation stage notation. Charcoal #12161C, layered blue-gray #1C2839, text #E5EAF2, secondary #A9B5C7, accent #9AB9FF, and amber #DFC18B form the homepage palette.
 
-Homepage styles are isolated in `app/home.module.css` and `components/ui/hero-section.module.css`. The supplied HeroSection is adapted around the existing search and live synthetic preview, without glow or stock imagery. Selection, expandable evidence, pan, zoom, and reset work on the preview; mobile replaces the canvas with a relationship list. Synthetic data is explicitly labeled.
+Homepage styling is isolated in `app/home.module.css`; behavior is in `components/homepage-*.tsx`. The existing shared search and investigation context are preserved. The graph uses the existing synthetic dataset: each node and path has a real meaning within that dataset. Selection opens evidence; hover and keyboard focus highlight associated paths; pan, zoom, and reset work. The four-stage walkthrough changes with desktop scroll or explicit selection. Tablet stacks the composition before graph text becomes too small; mobile uses a compact relationship tree and manually selectable walkthrough stages.
 
 Reports prioritize domain identity, assessment, source coverage, timestamps, related domains, and uncertainty. The assessment facts come from the existing response, never invented scores.
 
@@ -29,7 +29,9 @@ The explorer supports node and edge selection, evidence inspection, search, filt
 
 ## Motion
 
-The user explicitly supplied WaveText. Keep the reusable component in components/ui/wave-text.tsx, its hook in components/ui/wave-text-utils/use-entrance.ts, and its supplied demo in components/ui/wave-text-demo.tsx. The home headline uses one 2.8-second muted blue-gray wave. Reduced motion and forced colors render ordinary static text. Do not extend this into ambient page animation.
+The latest brief supersedes the single-wave homepage. Keep the supplied WaveText and HeroSection components available without changing their implementation. The homepage now uses Motion for React with LazyMotion, finite staged reveals, SVG path drawing, node arrival emphasis, contextual hover highlighting, and short evidence transitions. Timing uses a decelerating cubic curve; no springs, bouncing, perpetual loops, parallax, or scroll hijacking. Reduced motion removes spatial movement and progressive drawing. The localized graph lighting is static.
+
+Motion references: https://motion.dev/docs/react-installation and https://motion.dev/docs/react-accessibility.
 
 ## Trust and preservation
 

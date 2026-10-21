@@ -1,5 +1,18 @@
 # Verification
 
+## Interactive homepage — October 21, 2026
+
+- `npm run lint` passed for the homepage and its dedicated components. TypeScript, production build, all 9 unit tests, and all 11 browser tests passed.
+- Browser checks cover finite graph entrance, hovered path emphasis, node/edge selection, expandable evidence, keyboard pan, zoom/reset, desktop scroll stages, explicit stage selection, mobile navigation, reduced motion, forced colors, existing search, and downstream report/explorer flows.
+- Fixed a genuine interaction race: programmatic scrolling could override a selected walkthrough stage before Next step completed. Manual selection now remains authoritative until the user scrolls again. Tablet/mobile stages change only through their controls.
+- Axe found no violations in the tested states. No browser page errors were reported by the motion workflow. No Cyrillic UI strings were found.
+- Reviewed desktop 1440px, tablet 1024px, mobile 390px, and the expanded walkthrough. Automated overflow checks additionally cover 320, 540, and 768px.
+- All 11 protected report, explorer, API, backend, root layout, and global-style files match their original SHA256 baseline. The shared workspace/search file is unchanged in this revision.
+- Reversible checkpoint: Git `c4b256e` and `backups/homepage-before-motion-redesign-c4b256e.zip` outside the app directory.
+- Final images: `home-desktop.png`, `home-desktop-hero.png`, `home-mobile.png`, `home-tablet.png`, and `home-walkthrough.png` in `docs/screenshots/`. Static full-page captures use reduced motion so offscreen content remains visible.
+
+Motion and lint dependencies were added; there are no new API integrations or credentials. The data remains explicitly synthetic. Safari, Firefox, physical-device performance, and real screen-reader sessions were not tested. Automated accessibility checks are not a complete audit.
+
 ## Public homepage — October 20, 2026
 
 - Production build and TypeScript checks passed; 9 unit tests and all 11 browser tests passed in Microsoft Edge.

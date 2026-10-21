@@ -17,6 +17,7 @@ Open http://localhost:3000. Use **View example report** or check `aurora-deals.e
 
 ```sh
 npm test
+npm run lint
 npm run typecheck
 npm run build
 npm run test:browser
@@ -40,6 +41,8 @@ Screenshots are saved in `docs/screenshots/`. Provider states are tested using e
 
 The project already supports TypeScript, Tailwind CSS 4, and shadcn conventions (`components.json`). Reusable components live in `components/ui/`; global styles live in `app/globals.css`. Aliases use `@/` from the project root.
 
-The supplied `WaveText` component and demo are in `components/ui/`. Its entrance hook supports load, visibility, manual playback, and offscreen pause for repeated waves. `tw-animate-css` is installed; the custom animation utility and keyframes are defined in global CSS. The home uses a single muted wave, with static reduced-motion and forced-colors fallbacks. No image assets are needed for this text component.
+The supplied `WaveText` and `HeroSection` components remain in `components/ui/`. The public homepage now uses its own asymmetric composition and Motion for React, with finite graph reveals, evidence selection, and a scroll-driven investigation walkthrough. Motion preferences and forced colors are respected. All graph content is synthetic; no image assets or intelligence integrations were added. Homepage styling is isolated in `app/home.module.css`.
+
+`npm run lint` checks the homepage and its dedicated components; other routes retain their existing validation coverage.
 
 Design decisions: `docs/design-direction.md`. Verification and remaining limitations: `docs/verification.md`. Original research planning remains in `docs/PLAN.md`.

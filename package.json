@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint": "eslint app/page.tsx components/homepage-*.tsx",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -18,6 +19,7 @@
     "clsx": "^2.1.1",
     "geist": "^1.8.1",
     "lucide-react": "^1.58.0",
+    "motion": "^14.4.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -31,8 +33,11 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "prettier": "^3.9.10",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.72.0"
   },
   "engines": {
     "node": ">=20.9.0"

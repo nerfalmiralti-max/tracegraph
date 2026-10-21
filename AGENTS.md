@@ -14,9 +14,11 @@ Read `docs/design-direction.md` before UI work. The permanent direction is restr
 Dark Intelligence: Linear/Vercel for hierarchy, Cloudflare Radar for report structure,
 and DomainTools Iris for relationship exploration. All product copy must be English
 (en-US). Use the refined neutral palette, readable type, and purposeful interactions.
-The user explicitly requested WaveText; the home headline uses a single muted wave,
-with a static fallback for reduced motion. Distinguish demonstration data from real
-evidence, and never interpret missing data as a safe verdict.
+The latest homepage brief is “Intelligence made visible”: an asymmetric hero,
+functional relationship visualization, and Motion-based investigation walkthrough.
+Keep the supplied WaveText component available, but the homepage now uses a plain
+editorial headline and a coherent entrance sequence. Distinguish demonstration data
+from real evidence, and never interpret missing data as a safe verdict.
 
 Preserve the existing API and backend contracts during visual changes. Verify with
 `npm test`, `npm run build`, and the relevant browser workflows. Browser setup and

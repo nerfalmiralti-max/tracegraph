@@ -10,10 +10,14 @@ test("public homepage has a usable search and keyboard-operable investigation pr
     parseFloat(getComputedStyle(element).fontSize),
   );
   expect(size).toBeGreaterThanOrEqual(48);
-  expect(size).toBeLessThanOrEqual(56);
+  expect(size).toBeLessThanOrEqual(60);
   const search = await page.locator(".search-control").boundingBox();
-  expect(search!.width).toBeGreaterThan(700);
-  expect(search!.height).toBeGreaterThanOrEqual(70);
+  expect(search!.width).toBeGreaterThan(450);
+  expect(search!.height).toBeGreaterThanOrEqual(64);
+  const graph = await page
+    .locator("svg[aria-label='Example domain connections']")
+    .boundingBox();
+  expect(graph!.x).toBeGreaterThan(search!.x + search!.width);
 
   await page
     .getByRole("button", {
@@ -26,9 +30,6 @@ test("public homepage has a usable search and keyboard-operable investigation pr
     exact: true,
   });
   await expect(evidence.getByRole("heading")).toHaveText("polar-shop.example");
-  await evidence
-    .getByRole("button", { name: /Matching returns policy/ })
-    .click();
   await expect(
     evidence.getByText(/Common templates could also explain a match/),
   ).toBeVisible();
@@ -46,7 +47,7 @@ test("public homepage has a usable search and keyboard-operable investigation pr
   await expect(page.getByLabel("Example zoom level")).toHaveText("100%");
   await expect(scene).toHaveAttribute(
     "transform",
-    "translate(0 0) translate(425 240) scale(1) translate(-425 -240)",
+    "translate(0 0) translate(340 215) scale(1) translate(-340 -215)",
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -60,6 +61,9 @@ test("public homepage has a usable search and keyboard-operable investigation pr
     })
     .click();
   await expect(evidence.getByRole("heading")).toHaveText("nova-outlet.example");
+  await page
+    .getByRole("button", { name: /04 Keep the uncertainty in view/ })
+    .click();
   await page.getByRole("button", { name: "Explore example network" }).click();
   await expect(page).toHaveURL("/network");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

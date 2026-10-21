@@ -5,14 +5,13 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  Search,
-  FileSearch,
-  GitBranch,
+  Fingerprint,
+  ScanLine,
 } from "lucide-react";
 import { DomainSearch, useWorkspace } from "../components/workspace";
-import { HeroSection } from "../components/ui/hero-section";
-import { WaveText } from "../components/ui/wave-text";
+import { HomepageMotion, Reveal } from "../components/homepage-motion";
 import { HomepageInvestigation } from "../components/homepage-investigation";
+import { HomepageStory } from "../components/homepage-story";
 import styles from "./home.module.css";
 
 function BrandMark() {
@@ -39,126 +38,122 @@ function BrandMark() {
 export default function Home() {
   const { loading, report } = useWorkspace();
   return (
-    <div className={styles.page}>
-      <a href="#main" className="skip-link">
-        Skip to content
-      </a>
-      <header className={styles.header}>
-        <Link href="/" className={styles.brand} translate="no">
-          <BrandMark />
-          <span>TraceGraph</span>
-        </Link>
-        <nav aria-label="Main navigation" className={styles.navigation}>
-          <a href="#how-it-works">How it works</a>
-          <Link href="/about">Methodology</Link>
-          <a href="#investigate" className={styles.navAction}>
-            Check a website <ArrowUpRight size={16} />
-          </a>
-        </nav>
-      </header>
-      <main id="main" tabIndex={-1}>
-        <HeroSection
-          id="investigate"
-          title="Know who you're dealing with."
-          description="Investigate websites, uncover suspicious connections, and make more informed decisions before you trust a site."
-          heading={
-            <WaveText
-              id="home-headline"
-              as="h1"
-              className={styles.headline}
-              colors={["#8ea8d4", "#bac9df", "#99b4c5"]}
-              base="#e1e5eb"
-              shape="linear"
-              bands={4}
-              bandWidth={7}
-              duration={2.8}
-              delay={120}
-            >
-              Know who you're dealing with.
-            </WaveText>
-          }
-        >
-          <div className={styles.search}>
-            <DomainSearch />
-          </div>
-          <div role="status" className="sr-only">
-            {loading ? "Checking available sources…" : ""}
-          </div>
-          <div className={styles.heroLinks}>
-            <a href="#example">
-              Explore an example <ArrowDown size={15} />
-            </a>
-            {report && (
-              <Link href="/report">
-                Continue your investigation <ArrowRight size={15} />
-              </Link>
-            )}
-          </div>
-        </HeroSection>
-        <section
-          id="example"
-          className={styles.showcase}
-          aria-labelledby="showcase-title"
-        >
-          <div className={styles.showcaseIntroduction}>
-            <div>
-              <h2 id="showcase-title">A website is only the beginning.</h2>
-            </div>
-            <p>
-              Follow shared signals between websites. <br />
-              See the evidence behind every connection.
-            </p>
-          </div>
-          <HomepageInvestigation />
-        </section>
-        <section
-          id="how-it-works"
-          className={styles.capabilities}
-          aria-labelledby="capabilities-title"
-        >
-          <div className={styles.capabilitiesHeading}>
-            <h2 id="capabilities-title">Look closer. Decide with context.</h2>
-          </div>
-          <div className={styles.capabilityColumns}>
-            <article>
-              <Search size={24} />
-              <h3>Investigate websites.</h3>
-              <p>
-                Start with a domain or URL. Review available reputation signals
-                and see where the information stops.
-              </p>
-            </article>
-            <article>
-              <FileSearch size={24} />
-              <h3>Examine evidence.</h3>
-              <p>
-                Understand what each finding means, where it comes from, and
-                what it cannot tell you.
-              </p>
-            </article>
-            <article>
-              <GitBranch size={24} />
-              <h3>Discover connections.</h3>
-              <p>
-                Follow shared images and content across domains. Explore a
-                connection before drawing a conclusion.
-              </p>
-            </article>
-          </div>
-        </section>
-      </main>
-      <footer className={styles.footer}>
-        <div>
+    <HomepageMotion>
+      <div className={styles.page}>
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        <header className={styles.header}>
           <Link href="/" className={styles.brand} translate="no">
             <BrandMark />
             <span>TraceGraph</span>
           </Link>
-          <p>Research preview. Evidence before conclusions.</p>
-        </div>
-        <Link href="/about">
-          Sources & limitations <ArrowUpRight size={16} />
-        </Link>
-      </footer>
-    </div>
+          <nav aria-label="Main navigation" className={styles.navigation}>
+            <a href="#how-it-works">The investigation</a>
+            <Link href="/about">Our approach</Link>
+            <a href="#investigate" className={styles.navAction}>
+              Check a website <ArrowUpRight size={15} />
+            </a>
+          </nav>
+        </header>
+        <main id="main" tabIndex={-1}>
+          <section
+            id="investigate"
+            className={styles.hero}
+            aria-labelledby="home-headline"
+          >
+            <div className={styles.heroCopy}>
+              <Reveal delay={0.05}>
+                <p className={styles.eyebrow}>
+                  <Fingerprint size={17} /> Intelligence made visible
+                </p>
+                <h1 id="home-headline" className={styles.headline}>
+                  See the connections.
+                  <br />
+                  <span>Question the unknown.</span>
+                </h1>
+                <p className={styles.introduction}>
+                  A website never tells the whole story. Investigate its
+                  signals, follow its connections, and see what deserves a
+                  closer look.
+                </p>
+              </Reveal>
+              <Reveal delay={0.18} className={styles.search}>
+                <DomainSearch />
+                <p className={styles.trustNote}>
+                  <ScanLine size={16} /> Clear sources. Visible uncertainty. You
+                  decide.
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className={styles.heroLinks}>
+                  <a href="#how-it-works">
+                    Follow an example investigation <ArrowDown size={16} />
+                  </a>
+                  {report && (
+                    <Link href="/report">
+                      Continue your investigation <ArrowRight size={16} />
+                    </Link>
+                  )}
+                </div>
+              </Reveal>
+              <div role="status" className="sr-only">
+                {loading ? "Checking available sources…" : ""}
+              </div>
+            </div>
+            <Reveal delay={0.2} className={styles.heroVisual}>
+              <HomepageInvestigation />
+            </Reveal>
+          </section>
+          <div className={styles.principle}>
+            <span>Beyond the first impression.</span>
+            <p>
+              One domain is a starting point.
+              <br className={styles.mobileBreak} /> The evidence gives it
+              context.
+            </p>
+            <a href="#how-it-works" aria-label="See how an investigation works">
+              <ArrowDown size={20} />
+            </a>
+          </div>
+          <HomepageStory />
+          <Reveal className={styles.closing}>
+            <div>
+              <Fingerprint size={25} />
+              <h2>
+                A connection is a question.
+                <br />
+                <span>Evidence is where you start.</span>
+              </h2>
+            </div>
+            <div>
+              <p>
+                Shared content can have an innocent explanation. TraceGraph
+                keeps the source and its limitations in view, so a lead never
+                becomes an unsupported verdict.
+              </p>
+              <Link href="/about">
+                How we approach evidence <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </Reveal>
+        </main>
+        <footer className={styles.footer}>
+          <div>
+            <Link href="/" className={styles.brand} translate="no">
+              <BrandMark />
+              <span>TraceGraph</span>
+            </Link>
+            <span className={styles.footerNote}>
+              Independent questions. Informed decisions.
+            </span>
+          </div>
+          <p>
+            Research preview <span aria-hidden="true">/</span>{" "}
+            <Link href="/about">Sources & limitations</Link>
+          </p>
+        </footer>
+      </div>
+    </HomepageMotion>
   );
 }
