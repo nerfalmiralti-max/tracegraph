@@ -7,7 +7,7 @@ import {
   m,
   useReducedMotion,
 } from "motion/react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 export const settle = [0.22, 1, 0.36, 1] as const;
 
@@ -34,16 +34,19 @@ export function Reveal({
   delay?: number;
 }) {
   const reduced = useReducedMotion();
+  const [focused, setFocused] = useState(false);
   return (
     <m.div
       className={className}
       data-entrance
-      initial={reduced ? false : { opacity: 0, y: 16 }}
+      initial={reduced ? false : { opacity: 0, y: 8 }}
+      animate={focused ? { opacity: 1, y: 0 } : undefined}
       whileInView={{ opacity: 1, y: 0 }}
+      onFocusCapture={() => setFocused(true)}
       viewport={{ once: true, amount: 0.12 }}
       transition={{
-        duration: reduced ? 0 : 0.7,
-        delay: reduced ? 0 : delay,
+        duration: reduced || focused ? 0 : 0.45,
+        delay: reduced || focused ? 0 : delay,
         ease: settle,
       }}
     >

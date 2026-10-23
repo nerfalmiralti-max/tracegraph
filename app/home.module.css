@@ -7,7 +7,6 @@
   background: var(--home-bg);
   color: var(--home-text);
   min-height: 100dvh;
-  overflow: clip;
   font-size: 16px;
   line-height: 1.6;
 }
@@ -19,6 +18,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 .header {
+  position: relative;
+  z-index: 2;
   max-width: 1320px;
   margin: auto;
   padding: 26px 36px;
@@ -45,6 +46,9 @@
   gap: 30px;
   font-size: 14px;
   color: #b6c1d1;
+}
+.menuToggle {
+  display: none;
 }
 .navigation a {
   display: inline-flex;
@@ -206,7 +210,7 @@
 .heroVisual::before {
   content: "";
   position: absolute;
-  inset: -30px -40px;
+  inset: 0;
   background: radial-gradient(ellipse at 55% 38%, #4367a61c, transparent 68%);
   pointer-events: none;
 }
@@ -246,7 +250,7 @@
   width: 100%;
   height: auto;
   overflow: hidden;
-  touch-action: none;
+  touch-action: pan-y;
   cursor: grab;
 }
 .networkSvg:active {
@@ -335,6 +339,12 @@
     background 0.2s,
     box-shadow 0.2s;
 }
+.domainNode > span:nth-child(2) {
+  min-width: 0;
+}
+.domainNode svg {
+  flex-shrink: 0;
+}
 .domainNode:hover {
   border-color: #a8c3ff;
   background: #2b3b56;
@@ -375,9 +385,6 @@
 .selectedNode .selectionDot {
   background: #a6c2ff;
 }
-.nodeReveal {
-  animation: node-arrival 1s 1.1s ease-out both;
-}
 .signalNode {
   display: flex;
   flex-direction: column;
@@ -410,7 +417,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 11px;
+  font-size: 12px;
   color: #b5c0d2;
 }
 .mapLegend i {
@@ -425,8 +432,8 @@
 .zoomControls button {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   border: 0;
   border-radius: 5px;
   background: transparent;
@@ -436,7 +443,7 @@
   background: #2b3a51;
 }
 .zoomControls output {
-  font-size: 11px;
+  font-size: 12px;
   min-width: 36px;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -456,13 +463,13 @@
   align-items: center;
   gap: 16px;
   color: #b2c2db;
-  font-size: 11px;
+  font-size: 12px;
 }
 .weakSignal {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: #dfc18b;
 }
 .weakSignal::before {
@@ -479,13 +486,14 @@
   overflow-wrap: anywhere;
 }
 .evidenceList {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
+  min-height: 44px;
   gap: 8px;
 }
 .evidenceItem {
-  flex: 1 1 190px;
+  min-width: 0;
 }
 .evidenceItem > button {
   display: flex;
@@ -499,13 +507,15 @@
   border-radius: 4px;
   background: #28374d;
   color: #d5e2f8;
-  min-height: 38px;
+  min-height: 44px;
 }
 .evidenceItem > button > span {
   flex: 1;
 }
 .evidenceItem > button > svg {
   color: #a3bfea;
+  flex-shrink: 0;
+  transition: transform 0.18s;
 }
 .evidenceItem > button:hover {
   background: #344965;
@@ -533,7 +543,7 @@
   margin-top: 12px;
 }
 .evidenceFooter p {
-  font-size: 11px;
+  font-size: 12px;
   color: #afbed5;
   max-width: 235px;
   line-height: 1.7;
@@ -544,13 +554,13 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: #c6d7f7;
-  min-height: 36px;
+  min-height: 44px;
   white-space: nowrap;
 }
 .demoNote {
-  font-size: 11px;
+  font-size: 12px;
   color: #aab8cd;
   text-align: right;
   margin: 12px 18px 0;
@@ -589,17 +599,17 @@
 .story {
   max-width: 1248px;
   margin: auto;
-  padding: 94px 0 76px;
+  padding: 60px 0 48px;
   scroll-margin-top: 32px;
 }
 .storyHeading {
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 .storyHeading .eyebrow {
   margin-bottom: 18px;
 }
 .storyHeading h2 {
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 450;
   line-height: 1.15;
   letter-spacing: -1.6px;
@@ -607,12 +617,12 @@
 .storyHeading > p:last-child {
   color: var(--home-muted);
   font-size: 16px;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 .storyGrid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 88px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 56px;
   align-items: start;
 }
 .storySteps {
@@ -623,11 +633,11 @@
   display: flex;
   width: 100%;
   align-items: start;
-  gap: 20px;
+  gap: 16px;
   text-align: left;
   border: 0;
   background: transparent;
-  padding: 28px 24px;
+  padding: 20px 24px;
   color: #a6b3c9;
   transition:
     color 0.2s,
@@ -662,28 +672,29 @@
 }
 .storyStep > span:nth-child(2) {
   flex: 1;
+  min-width: 0;
 }
 .storyStep strong {
   display: block;
-  font-size: 21px;
+  font-size: 19px;
   font-weight: 450;
   letter-spacing: -0.4px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .storyStep > span > span {
   display: block;
   color: #aebace;
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.65;
 }
 .storyStep > svg {
   color: #8faddd;
   margin-top: 5px;
+  flex-shrink: 0;
 }
 .storySticky {
   position: sticky;
-  top: 80px;
-  padding-top: 12px;
+  top: 24px;
 }
 .storyPreview {
   border-radius: 12px;
@@ -696,7 +707,7 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px 24px;
+  padding: 16px 24px;
   font-size: 12px;
   color: #b7c7e0;
 }
@@ -722,48 +733,79 @@
 .storyProgress span[data-active="true"] {
   background: #94b4ff;
 }
+.storyPanels {
+  display: grid;
+}
 .storyState {
-  padding: 30px;
-  min-height: 365px;
+  grid-area: 1 / 1;
+  min-width: 0;
+  padding: 24px;
+}
+.stageDescription {
+  display: none;
 }
 .stateLabel {
   color: #adbfdf;
-  font-size: 12px;
-  margin-bottom: 28px;
+  font-size: 13px;
+  margin-bottom: 16px;
 }
 .storyState h3 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 450;
   letter-spacing: -0.6px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
-.domainStage {
-  text-align: center;
+.domainIdentity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.domainIdentity > div {
+  min-width: 0;
 }
 .largeMonogram {
   display: grid;
   place-items: center;
-  margin: 0 auto 18px;
-  width: 58px;
-  height: 58px;
-  border-radius: 12px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   background: #b3c5d8;
   color: #273c53;
   font:
-    italic bold 40px Georgia,
+    italic bold 28px Georgia,
     serif;
 }
-.domainStage > p {
+.domainIdentity p {
   color: #aebed5;
   font-size: 14px;
-  margin-top: 8px;
+  margin-top: 4px;
+}
+.domainContext {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 13px;
+}
+.domainContext > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+.domainContext dt {
+  color: #aebed6;
+}
+.domainContext dd {
+  text-align: right;
+  max-width: 65%;
 }
 .observation {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 20px 0 0;
-  max-width: 320px;
-  margin: 18px auto 0;
+  padding: 16px 0 0;
+  margin: 20px 0 0;
   border-top: 1px solid #3b4860;
   font-size: 13px;
   text-align: left;
@@ -779,7 +821,7 @@
   display: flex;
   align-items: center;
   gap: 13px;
-  padding: 24px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #3b4860;
   color: #d3dff2;
   font-size: 14px;
@@ -801,8 +843,8 @@
 .storyCaution {
   font-size: 13px;
   color: #b8c6dd;
-  margin-top: 22px;
-  line-height: 1.8;
+  margin-top: 16px;
+  line-height: 1.65;
 }
 .miniRoot {
   display: flex;
@@ -811,17 +853,17 @@
   gap: 10px;
   color: #e5ecf9;
   font-size: 16px;
-  padding: 18px;
+  padding: 12px;
   border: 1px solid #7196d6;
   background: #2a3c56;
   border-radius: 6px;
-  margin-top: 30px;
+  margin-top: 18px;
 }
 .miniBranches {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
-  padding-top: 48px;
+  padding-top: 32px;
   position: relative;
 }
 .miniBranches::before {
@@ -829,8 +871,8 @@
   position: absolute;
   left: 24%;
   right: 24%;
-  top: 24px;
-  height: 24px;
+  top: 16px;
+  height: 16px;
   border: 1px solid #839ec7;
   border-bottom: 0;
 }
@@ -839,34 +881,35 @@
   position: absolute;
   top: 0;
   left: 50%;
-  height: 24px;
+  height: 16px;
   border-left: 1px solid #839ec7;
 }
 .miniBranches > div {
   text-align: center;
   background: #26364c;
   border-radius: 6px;
-  padding: 15px 8px;
+  padding: 12px 8px;
 }
 .miniBranches span {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   color: #b6c7e1;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .miniBranches strong {
   font-weight: 450;
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 .conclusionStage h3 {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 .conclusionStage > div {
   display: flex;
   justify-content: space-between;
   gap: 18px;
   font-size: 13px;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #344259;
 }
 .conclusionStage > div > span {
@@ -885,7 +928,7 @@
   justify-content: space-between;
   width: 100%;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 16px;
   border: 0;
   padding: 12px 14px;
   background: #354c70;
@@ -901,20 +944,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 18px 24px;
+  padding: 10px 24px;
   background: #212d40;
-  font-size: 11px;
+  font-size: 12px;
   color: #b3c3dd;
 }
 .storyBottom button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: #d5e3ff;
   border: 0;
   background: none;
-  min-height: 36px;
+  min-height: 44px;
   white-space: nowrap;
 }
 .storyHint {
@@ -925,24 +968,23 @@
 }
 .closing {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 80px;
-  max-width: 1248px;
-  margin: 0 auto 70px;
-  padding: 54px 0;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 56px;
+  margin: 36px 0 0;
+  padding: 32px 0 0;
   border-top: 1px solid #303b4c;
 }
 .closing svg {
   color: #9bb7ea;
 }
-.closing h2 {
-  font-size: 29px;
+.closing h3 {
+  font-size: 25px;
   line-height: 1.4;
   letter-spacing: -0.8px;
   font-weight: 450;
-  margin-top: 20px;
+  margin-top: 12px;
 }
-.closing h2 span {
+.closing h3 span {
   color: #a9bddf;
 }
 .closing > div:last-child {
@@ -952,7 +994,7 @@
   color: #aebbd0;
   font-size: 15px;
   line-height: 1.8;
-  max-width: 440px;
+  max-width: 520px;
 }
 .closing a {
   display: inline-flex;
@@ -960,7 +1002,7 @@
   gap: 10px;
   font-size: 14px;
   color: #c9d9f5;
-  margin-top: 24px;
+  margin-top: 12px;
   min-height: 40px;
 }
 .footer {
@@ -986,7 +1028,7 @@
 }
 .footerNote,
 .footer p {
-  font-size: 11px;
+  font-size: 12px;
   color: #aebbd0;
 }
 .footer p > span {
@@ -1003,18 +1045,9 @@
     transform: translateY(0);
   }
 }
-@keyframes node-arrival {
-  from {
-    filter: brightness(1.4);
-  }
-  to {
-    filter: brightness(1);
-  }
-}
 @media (max-width: 1320px) {
   .principle,
   .story,
-  .closing,
   .footer {
     margin-left: 36px;
     margin-right: 36px;
@@ -1031,72 +1064,6 @@
   }
 }
 @media (max-width: 1100px) {
-  .hero {
-    grid-template-columns: 0.95fr 1.05fr;
-    gap: 20px;
-    padding-top: 46px;
-  }
-  .headline {
-    font-size: 44px;
-    letter-spacing: -1.8px;
-  }
-  .introduction {
-    font-size: 16px;
-  }
-  .search :global(.search-control) {
-    flex-wrap: wrap;
-    padding: 10px;
-  }
-  .search :global(.search-control input) {
-    flex: 1;
-    width: 120px;
-  }
-  .search :global(.search-control > .button) {
-    width: 100%;
-  }
-  .evidenceFooter {
-    flex-wrap: wrap;
-    gap: 2px;
-  }
-  .mapToolbar {
-    padding-left: 8px;
-    padding-right: 8px;
-    gap: 8px;
-  }
-  .mapTitle {
-    font-size: 11px;
-  }
-  .evidence {
-    margin: 0 8px;
-  }
-  .storyGrid {
-    gap: 28px;
-  }
-  .storyStep {
-    padding-left: 20px;
-    padding-right: 12px;
-    gap: 15px;
-  }
-  .storyStep > svg {
-    display: none;
-  }
-  .storyState {
-    padding: 24px;
-  }
-  .miniBranches {
-    gap: 10px;
-  }
-  .miniBranches strong {
-    font-size: 12px;
-  }
-  .closing {
-    gap: 40px;
-  }
-  .footerNote {
-    display: none;
-  }
-}
-@media (max-width: 1100px) {
   .header {
     padding: 20px 28px;
   }
@@ -1107,7 +1074,7 @@
     display: none;
   }
   .hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding: 44px 28px;
     gap: 42px;
   }
@@ -1127,27 +1094,21 @@
   .search {
     max-width: 580px;
   }
-  .search :global(.search-control) {
-    flex-wrap: nowrap;
-    padding: 7px 7px 7px 17px;
-  }
-  .search :global(.search-control > .button) {
-    width: auto;
-  }
   .heroVisual {
     max-width: 680px;
     width: 100%;
     justify-self: center;
   }
-  .evidenceFooter {
-    flex-wrap: nowrap;
+  .mapToolbar {
+    padding-left: 8px;
+    padding-right: 8px;
+    gap: 8px;
   }
-  .mapTitle {
-    font-size: 12px;
+  .evidence {
+    margin: 0 8px;
   }
   .principle,
   .story,
-  .closing,
   .footer {
     margin-left: 28px;
     margin-right: 28px;
@@ -1162,43 +1123,64 @@
     flex: 1;
   }
   .story {
-    padding-top: 70px;
+    padding-top: 48px;
   }
   .storyGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
   .storySteps {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     border-left: 0;
     gap: 8px;
   }
   .storyStep {
-    min-height: 180px;
-    padding: 20px;
+    padding: 16px;
     border-left: 1px solid #39465b;
-    gap: 14px;
+    gap: 12px;
     height: 100%;
   }
   .storyStep strong {
-    font-size: 18px;
+    font-size: 17px;
+    margin-bottom: 0;
   }
-  .storyStep > span > span {
-    font-size: 14px;
+  .storyStep > span > span,
+  .storyStep > svg {
+    display: none;
+  }
+  .storyStep::before {
+    top: 12px;
+    bottom: 12px;
   }
   .storySticky {
     position: static;
-    padding-top: 0;
   }
   .storyState {
-    min-height: 365px;
-    padding: 32px;
+    padding: 24px;
+  }
+  .stageDescription {
+    display: block;
+    color: #aebace;
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    max-width: 540px;
+  }
+  .stateLabel {
+    margin-bottom: 8px;
   }
   .miniBranches strong {
     font-size: 15px;
   }
-  .closing h2 {
-    font-size: 26px;
+  .closing {
+    gap: 32px;
+  }
+  .closing h3 {
+    font-size: 24px;
+  }
+  .footerNote {
+    display: none;
   }
 }
 @media (max-width: 560px) {
@@ -1211,12 +1193,42 @@
   .brand svg {
     width: 25px;
   }
-  .navigation {
-    gap: 16px;
-    font-size: 12px;
+  .menuToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid #39465b;
+    border-radius: 6px;
+    color: #c9d3e3;
+    font-size: 14px;
   }
-  .navigation > a:first-child {
+  .navigation {
     display: none;
+    position: absolute;
+    top: calc(100% - 8px);
+    left: 22px;
+    right: 22px;
+    padding: 12px;
+    background: #1b2432;
+    border: 1px solid #39465b;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px #070c1640;
+    gap: 4px;
+    font-size: 15px;
+  }
+  .navigation[data-open="true"] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .navigation a,
+  .navigation .navAction {
+    display: flex;
+    padding: 8px 12px;
   }
   .hero {
     padding: 32px 22px 30px;
@@ -1258,10 +1270,10 @@
     width: 100%;
   }
   .search :global(.search-hint) {
-    font-size: 11px;
+    font-size: 12px;
   }
   .trustNote {
-    font-size: 11px;
+    font-size: 12px;
     gap: 7px;
     margin-top: 12px;
   }
@@ -1273,10 +1285,10 @@
     padding: 0 0 20px;
   }
   .mapTitle {
-    font-size: 11px;
+    font-size: 12px;
   }
   .syntheticLabel {
-    font-size: 10px;
+    font-size: 12px;
   }
   .desktopNetwork {
     display: none;
@@ -1338,11 +1350,11 @@
     gap: 10px;
   }
   .domainNode strong {
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: -0.15px;
   }
   .domainNode small {
-    font-size: 11px;
+    font-size: 12px;
   }
   .evidence {
     margin: 0;
@@ -1351,8 +1363,10 @@
   .evidence h2 {
     font-size: 17px;
   }
-  .evidenceItem {
-    flex-basis: 100%;
+  .evidenceList {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 96px;
+    align-content: start;
   }
   .evidenceItem > button {
     font-size: 13px;
@@ -1360,7 +1374,7 @@
   }
   .evidenceHeading,
   .weakSignal {
-    font-size: 11px;
+    font-size: 12px;
   }
   .evidenceExplanation {
     font-size: 13px;
@@ -1369,7 +1383,7 @@
     display: block;
   }
   .evidenceFooter p {
-    font-size: 11px;
+    font-size: 12px;
     max-width: none;
     margin-top: 14px;
   }
@@ -1381,12 +1395,11 @@
   }
   .demoNote {
     margin: 12px 0 0;
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
   }
   .principle,
   .story,
-  .closing,
   .footer {
     margin-left: 22px;
     margin-right: 22px;
@@ -1400,8 +1413,8 @@
     display: block;
   }
   .story {
-    padding-top: 54px;
-    padding-bottom: 48px;
+    padding-top: 40px;
+    padding-bottom: 32px;
   }
   .storyHeading {
     margin-bottom: 30px;
@@ -1414,55 +1427,52 @@
     font-size: 14px;
   }
   .storySteps {
-    grid-template-columns: 1fr;
-    gap: 0;
+    gap: 8px;
   }
   .storyStep {
     min-height: 0;
-    padding: 18px 14px;
-    gap: 14px;
+    padding: 12px 10px;
+    gap: 8px;
   }
   .storyStep strong {
-    font-size: 17px;
+    font-size: 15px;
     margin-bottom: 0;
   }
   .storyStep > span > span {
     display: none;
     margin-top: 10px;
   }
-  .activeStep > span > span {
-    display: block;
-  }
+
   .storyGrid {
     gap: 24px;
   }
   .storyPreviewBar {
-    padding: 18px;
-    font-size: 11px;
+    padding: 16px;
+    gap: 12px;
+    font-size: 12px;
   }
   .storyProgress {
     padding: 0 18px;
   }
   .storyState {
-    padding: 24px 18px;
-    min-height: 365px;
+    padding: 20px 16px;
   }
   .storyState h3 {
     font-size: 21px;
   }
   .domainStage h3 {
-    font-size: 21px;
+    font-size: 17px;
   }
   .stateLabel {
-    font-size: 11px;
-    margin-bottom: 24px;
+    font-size: 13px;
+    margin-bottom: 8px;
   }
   .sourceStage > div {
-    font-size: 12px;
+    font-size: 14px;
     gap: 9px;
   }
   .sourceStage small {
-    font-size: 11px;
+    font-size: 12px;
   }
   .signalType {
     display: none;
@@ -1474,14 +1484,14 @@
     gap: 8px;
   }
   .miniBranches strong {
-    font-size: 11px;
+    font-size: 13px;
     overflow-wrap: anywhere;
   }
   .miniBranches span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .conclusionStage > div {
-    font-size: 12px;
+    font-size: 13px;
     gap: 16px;
   }
   .conclusionStage > div > span {
@@ -1492,27 +1502,27 @@
     overflow-wrap: anywhere;
   }
   .storyBottom {
-    padding: 12px 18px;
+    padding: 8px 16px;
     gap: 12px;
   }
   .storyBottom > span {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 140px;
   }
   .storyBottom button {
-    font-size: 11px;
+    font-size: 13px;
     min-height: 44px;
   }
   .storyHint {
-    font-size: 11px;
+    font-size: 12px;
   }
   .closing {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 32px 0 0;
-    margin-bottom: 40px;
+    gap: 16px;
+    padding: 24px 0 0;
+    margin: 28px 0 0;
   }
-  .closing h2 {
+  .closing h3 {
     font-size: 25px;
   }
   .closing p {

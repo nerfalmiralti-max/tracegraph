@@ -1,5 +1,51 @@
 # Verification
 
+## Homepage polish — October 23, 2026
+
+The existing identity, hero, synthetic dataset, and SVG relationship graph are preserved. This revision changes only the public homepage, its dedicated components, browser checks, and documentation.
+
+### Corrections
+
+- Removed the page-wide `overflow: clip`. The graph's ambient pseudo-element extended beyond its container, causing 4px of overflow at 1280px and 18px on phones when clipping was disabled. Its bounds now stay inside the visualization. No page-level overflow mask is used.
+- Reduced storytelling spacing, replaced the oversized centered Trace / 01 monogram with domain context, and brought the evidence philosophy into the walkthrough's conclusion. Tablet and phone stage controls use a compact two-column layout with descriptions in the preview.
+- Walkthrough panels share a content-sized grid cell, so every stage has the same height without a fixed minimum height. Inactive panels are inert and excluded from accessibility navigation. Collapsed evidence maintains its height when switching between one and two shared signals.
+- Replaced the narrow scroll trigger with a frame-batched, passive scroll update. It selects the nearest stage and makes the final stage reachable when the page cannot scroll farther. Explicit selection wins until the user scrolls; reduced-motion and narrow layouts use manual controls.
+- Removed delayed context-edge feedback and the brightness pulse. Separated hover and keyboard focus, improved inactive-edge contrast, added arrow-key domain selection and evidence associations, and increased zoom/reset targets to 44px.
+- Kept pointer pan and keyboard pan/reset. Tablet touch input scrolls the page vertically instead of being captured by the SVG. Phones retain the accessible relationship list.
+- Added mobile navigation with Escape dismissal and focus return. The check action focuses the search without the fragment navigation subsequently discarding focus. A failed example request returns focus to the existing search error; pending requests remain disabled and expose busy state.
+
+### Validation
+
+- `npm run typecheck`, homepage-scoped `npm run lint`, and `npm run build`: passed.
+- `npm test`: 9 passed. Microsoft Edge / Playwright against the production build: 17 passed.
+- All five requested sizes were opened, exercised, captured, and visually reviewed. Overflow is zero at each size; the outer page has computed `overflow-x: visible`. Additional existing coverage includes 320, 540, and 1024px.
+- Each requested size checks stable walkthrough/evidence heights, node selection, keyboard domain navigation, expanded evidence, zoom/reset or mobile menu, and console/page errors. No unexpected console or page errors occurred in these five runs. Axe reported no violations in the tested states.
+- Search submission, validation, loading, failed examples, retry, report/network entry, provider response fixtures, and downstream report/explorer workflows pass. No Cyrillic UI strings were found in `app/`, `components/`, or `lib/`.
+- Separate browser checks passed for mouse pan/reset and emulated tablet touch scrolling over the graph. The observed initial layout-shift score was 0 in a desktop test session; this is a laboratory observation, not a field-performance claim.
+- Reduced motion, forced colors, focus visibility, finite graph entrance, and hover emphasis remain covered. The scroll test now waits for asynchronous wheel input before issuing a separate scroll command.
+- All 11 protected report, explorer, methodology, API, backend, root-layout, and global-style SHA256 hashes match the original baseline. `components/workspace.tsx` is unchanged.
+
+| Viewport | Horizontal overflow | Full-page capture |
+| --- | --- | --- |
+| 1440 × 900 | 0px | [Desktop](screenshots/home-1440x900.png) |
+| 1280 × 800 | 0px | [Small desktop](screenshots/home-1280x800.png) |
+| 768 × 1024 | 0px | [Tablet](screenshots/home-768x1024.png) |
+| 390 × 844 | 0px | [Mobile](screenshots/home-390x844.png) |
+| 360 × 800 | 0px | [Narrow mobile](screenshots/home-360x800.png) |
+
+Captures use reduced motion to show offscreen content reliably; motion is tested separately. Full-page heights decreased from 2469 to 2176px at 1440px, 2445 to 2152px at 1280px, 3320 to 2912px at 768px, 3197 to 3072px at 390px, and 3283 to 3187px at 360px.
+
+### Files and recovery
+
+- `app/page.tsx`, `app/home.module.css`
+- `components/homepage-investigation.tsx`, `components/homepage-story.tsx`, `components/homepage-motion.tsx`, new `components/homepage-navigation.tsx`
+- `tests/browser/homepage-motion.spec.ts`, new `tests/browser/homepage-polish.spec.ts`
+- `docs/design-direction.md`, this report, and homepage screenshots in `docs/screenshots/`
+
+The pre-polish implementation remains at Git `9d6aa2d` and `../backups/homepage-before-polish-9d6aa2d.zip` outside the application directory.
+
+Safari, Firefox, physical-device performance, and real screen-reader sessions were not tested. Automated accessibility and emulated touch checks do not replace those reviews. No real API integration was added or exercised; demonstration relationships remain synthetic, inferred, and unverified.
+
 ## Interactive homepage — October 21, 2026
 
 - `npm run lint` passed for the homepage and its dedicated components. TypeScript, production build, all 9 unit tests, and all 11 browser tests passed.

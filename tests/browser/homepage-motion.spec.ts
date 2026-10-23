@@ -47,7 +47,12 @@ test("finite graph entrance, hover paths, scroll storytelling, and reduced-motio
   );
   await expect(preview.getByText("polar-shop.example")).toBeVisible();
   await preview.hover();
+  const beforeScroll = await page.evaluate(() => window.scrollY);
   await page.mouse.wheel(0, -250);
+  // Wheel input is asynchronous; don't race it with the following programmatic scroll.
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeLessThan(beforeScroll);
   await stages
     .getByRole("button", { name: /04 Keep/ })
     .evaluate((element) => element.scrollIntoView({ block: "center" }));
@@ -55,7 +60,9 @@ test("finite graph entrance, hover paths, scroll storytelling, and reduced-motio
     "aria-pressed",
     "true",
   );
-  await expect(preview.getByText("Not established")).toBeVisible();
+  await expect(
+    preview.locator('[aria-hidden="false"]').getByText("Not established"),
+  ).toBeVisible();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
   await page.emulateMedia({ reducedMotion: "reduce" });

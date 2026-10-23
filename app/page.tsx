@@ -1,17 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowDown,
-  ArrowRight,
-  ArrowUpRight,
-  Fingerprint,
-  ScanLine,
-} from "lucide-react";
+import { ArrowDown, ArrowRight, Fingerprint, ScanLine } from "lucide-react";
 import { DomainSearch, useWorkspace } from "../components/workspace";
 import { HomepageMotion, Reveal } from "../components/homepage-motion";
 import { HomepageInvestigation } from "../components/homepage-investigation";
 import { HomepageStory } from "../components/homepage-story";
+import { HomepageNavigation } from "../components/homepage-navigation";
 import styles from "./home.module.css";
 
 function BrandMark() {
@@ -48,13 +43,7 @@ export default function Home() {
             <BrandMark />
             <span>TraceGraph</span>
           </Link>
-          <nav aria-label="Main navigation" className={styles.navigation}>
-            <a href="#how-it-works">The investigation</a>
-            <Link href="/about">Our approach</Link>
-            <a href="#investigate" className={styles.navAction}>
-              Check a website <ArrowUpRight size={15} />
-            </a>
-          </nav>
+          <HomepageNavigation />
         </header>
         <main id="main" tabIndex={-1}>
           <section
@@ -117,26 +106,6 @@ export default function Home() {
             </a>
           </div>
           <HomepageStory />
-          <Reveal className={styles.closing}>
-            <div>
-              <Fingerprint size={25} />
-              <h2>
-                A connection is a question.
-                <br />
-                <span>Evidence is where you start.</span>
-              </h2>
-            </div>
-            <div>
-              <p>
-                Shared content can have an innocent explanation. TraceGraph
-                keeps the source and its limitations in view, so a lead never
-                becomes an unsupported verdict.
-              </p>
-              <Link href="/about">
-                How we approach evidence <ArrowUpRight size={17} />
-              </Link>
-            </div>
-          </Reveal>
         </main>
         <footer className={styles.footer}>
           <div>

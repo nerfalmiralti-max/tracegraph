@@ -1,6 +1,6 @@
 # TraceGraph design direction
 
-Updated October 20, 2026. The public homepage follows the consumer product direction below; report and explorer retain their existing design.
+Updated October 23, 2026. The public homepage follows the consumer product direction below; report and explorer retain their existing design.
 
 ## Identity and language
 
@@ -29,7 +29,9 @@ The explorer supports node and edge selection, evidence inspection, search, filt
 
 ## Motion
 
-The latest brief supersedes the single-wave homepage. Keep the supplied WaveText and HeroSection components available without changing their implementation. The homepage now uses Motion for React with LazyMotion, finite staged reveals, SVG path drawing, node arrival emphasis, contextual hover highlighting, and short evidence transitions. Timing uses a decelerating cubic curve; no springs, bouncing, perpetual loops, parallax, or scroll hijacking. Reduced motion removes spatial movement and progressive drawing. The localized graph lighting is static.
+The latest brief supersedes the single-wave homepage. Keep the supplied WaveText and HeroSection components available without changing their implementation. The homepage now uses Motion for React with LazyMotion, finite staged reveals, SVG path drawing, short node entrances, contextual hover highlighting, and short evidence transitions. Timing uses a decelerating cubic curve; no springs, bouncing, perpetual loops, parallax, or scroll hijacking. Reduced motion removes spatial movement and progressive drawing. The localized graph lighting is static.
+
+The October 23 polish preserves this composition. Use content-sized, stable-height walkthrough panels, compact stage controls on tablet and phone, and a conclusion about evidence within the walkthrough. The page must fit without a global overflow mask. Mobile navigation exposes all essential links. The graph retains immediate evidence updates, animated edge emphasis, keyboard domain selection, and 44px zoom/reset controls. Inactive paths must remain readable. Tablet touch scrolls the page; desktop pointer input pans the graph. Avoid brightness pulses and delayed hover responses. Reduced motion disables automatic stage changes as well as spatial animation.
 
 Motion references: https://motion.dev/docs/react-installation and https://motion.dev/docs/react-accessibility.
 

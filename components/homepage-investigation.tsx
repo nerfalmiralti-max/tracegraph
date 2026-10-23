@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AnimatePresence, m, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import {
   AlignLeft,
   ArrowUpRight,
@@ -46,6 +46,7 @@ export function HomepageInvestigation() {
   const reduced = useReducedMotion();
   const [selected, setSelected] = useState(example.connections[0].domain);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [focused, setFocused] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -54,6 +55,7 @@ export function HomepageInvestigation() {
     y: number;
     originX: number;
     originY: number;
+    scale: number;
   } | null>(null);
   const connection = example.connections.find(
     (item) => item.domain === selected,
@@ -61,7 +63,7 @@ export function HomepageInvestigation() {
   const signals = example.signals.filter((signal) =>
     connection.sharedSignalIds.includes(signal.id),
   );
-  const active = hovered ?? selected;
+  const active = hovered ?? focused ?? selected;
   function select(domain: string, signal?: string) {
     setSelected(domain);
     setExpanded(signal ?? null);
@@ -76,11 +78,31 @@ export function HomepageInvestigation() {
         className={`${styles.domainNode} ${selected === domain ? styles.selectedNode : ""}`}
         aria-label={`${domain} ${count} shared ${count === 1 ? "signal" : "signals"}`}
         aria-pressed={selected === domain}
+        aria-controls="home-connection-evidence"
+        data-domain-node={domain}
         onClick={() => select(domain)}
         onMouseEnter={() => setHovered(domain)}
         onMouseLeave={() => setHovered(null)}
-        onFocus={() => setHovered(domain)}
-        onBlur={() => setHovered(null)}
+        onFocus={() => setFocused(domain)}
+        onBlur={() => setFocused(null)}
+        onKeyDown={(event) => {
+          const direction = ["ArrowRight", "ArrowDown"].includes(event.key)
+            ? 1
+            : ["ArrowLeft", "ArrowUp"].includes(event.key)
+              ? -1
+              : 0;
+          if (!direction) return;
+          const nodes = Array.from(
+            event.currentTarget
+              .closest("[data-domain-list]")!
+              .querySelectorAll<HTMLButtonElement>("[data-domain-node]"),
+          );
+          event.preventDefault();
+          const index = nodes.indexOf(event.currentTarget);
+          const next = nodes[(index + direction + nodes.length) % nodes.length];
+          next.focus();
+          select(next.dataset.domainNode!);
+        }}
       >
         <span className={styles.nodeIcon}>
           <Globe2 size={19} />
@@ -113,8 +135,10 @@ export function HomepageInvestigation() {
           aria-label="Example domain connections"
           aria-describedby="home-map-instructions"
           tabIndex={0}
+          data-domain-list
           onPointerDown={(event) => {
             if (
+              event.pointerType === "touch" ||
               event.button !== 0 ||
               (event.target as Element).closest("button, [role='button']")
             )
@@ -124,13 +148,13 @@ export function HomepageInvestigation() {
               y: event.clientY,
               originX: pan.x,
               originY: pan.y,
+              scale: 680 / event.currentTarget.getBoundingClientRect().width,
             };
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
             if (!drag.current) return;
-            const scale =
-              680 / event.currentTarget.getBoundingClientRect().width;
+            const { scale } = drag.current;
             setPan({
               x:
                 drag.current.originX + (event.clientX - drag.current.x) * scale,
@@ -167,7 +191,8 @@ export function HomepageInvestigation() {
         >
           <desc id="home-map-instructions">
             Drag or use arrow keys to pan. Press Home to reset. Select a domain
-            or relationship to inspect evidence.
+            or relationship to inspect evidence. When a domain is focused, use
+            arrow keys to select another domain.
           </desc>
           <defs>
             <pattern
@@ -213,11 +238,14 @@ export function HomepageInvestigation() {
                 animate={{
                   pathLength: 1,
                   opacity:
-                    index === 0 && active !== "nova-outlet.example" ? 0.3 : 1,
+                    index === 0 && active !== "nova-outlet.example" ? 0.8 : 1,
                 }}
                 transition={{
-                  duration: reduced ? 0 : 0.9,
-                  delay: reduced ? 0 : 0.45 + index * 0.1,
+                  pathLength: {
+                    duration: reduced ? 0 : 0.6,
+                    delay: reduced ? 0 : 0.2 + index * 0.1,
+                  },
+                  opacity: { duration: reduced ? 0 : 0.18 },
                 }}
               />
             ))}
@@ -231,13 +259,13 @@ export function HomepageInvestigation() {
                   initial={reduced ? false : { pathLength: 0 }}
                   animate={{
                     pathLength: 1,
-                    opacity: active === edge.domain ? 1 : 0.23,
-                    stroke: active === edge.domain ? "#8caeff" : "#6f87a8",
+                    opacity: active === edge.domain ? 1 : 0.64,
+                    stroke: active === edge.domain ? "#8caeff" : "#8da4c6",
                   }}
                   transition={{
                     pathLength: {
-                      duration: reduced ? 0 : 0.95,
-                      delay: reduced ? 0 : 0.7 + index * 0.12,
+                      duration: reduced ? 0 : 0.6,
+                      delay: reduced ? 0 : 0.35 + index * 0.1,
                     },
                     opacity: { duration: reduced ? 0 : 0.2 },
                     stroke: { duration: reduced ? 0 : 0.2 },
@@ -249,12 +277,15 @@ export function HomepageInvestigation() {
                   role="button"
                   tabIndex={0}
                   aria-label={`Inspect ${edge.label.toLowerCase()} connection to ${edge.domain}`}
-                  aria-pressed={selected === edge.domain}
+                  aria-pressed={
+                    selected === edge.domain && expanded === edge.signal
+                  }
+                  aria-controls="home-connection-evidence"
                   onClick={() => select(edge.domain, edge.signal)}
                   onMouseEnter={() => setHovered(edge.domain)}
                   onMouseLeave={() => setHovered(null)}
-                  onFocus={() => setHovered(edge.domain)}
-                  onBlur={() => setHovered(null)}
+                  onFocus={() => setFocused(edge.domain)}
+                  onBlur={() => setFocused(null)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
@@ -271,8 +302,8 @@ export function HomepageInvestigation() {
                 initial={reduced ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  delay: reduced ? 0 : 0.25,
-                  duration: reduced ? 0 : 0.6,
+                  delay: reduced ? 0 : 0.1,
+                  duration: reduced ? 0 : 0.4,
                 }}
               >
                 <div className={styles.subjectMeta}>
@@ -297,8 +328,8 @@ export function HomepageInvestigation() {
                   initial={reduced ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                    delay: reduced ? 0 : 0.65 + index * 0.15,
-                    duration: reduced ? 0 : 0.5,
+                    delay: reduced ? 0 : 0.2 + index * 0.1,
+                    duration: reduced ? 0 : 0.4,
                   }}
                 >
                   <span>
@@ -318,12 +349,11 @@ export function HomepageInvestigation() {
               >
                 <m.div
                   data-entrance
-                  className={styles.nodeReveal}
-                  initial={reduced ? false : { opacity: 0, y: 10 }}
+                  initial={reduced ? false : { opacity: 0.6, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: reduced ? 0 : 1 + index * 0.2,
-                    duration: reduced ? 0 : 0.65,
+                    delay: reduced ? 0 : 0.35 + index * 0.1,
+                    duration: reduced ? 0 : 0.4,
                     ease: settle,
                   }}
                 >
@@ -369,6 +399,7 @@ export function HomepageInvestigation() {
         className={styles.mobileNetwork}
         role="group"
         aria-label="Example domain connections"
+        data-domain-list
       >
         <div className={styles.mobileSubject}>
           <span className={styles.subjectMonogram}>a</span>
@@ -387,6 +418,7 @@ export function HomepageInvestigation() {
         </div>
       </div>
       <aside
+        id="home-connection-evidence"
         className={styles.evidence}
         aria-label="Example connection evidence"
       >
@@ -394,58 +426,59 @@ export function HomepageInvestigation() {
           <span>Connection evidence</span>
           <span className={styles.weakSignal}>Unverified</span>
         </div>
-        <AnimatePresence mode="wait" initial={false}>
-          <m.div
-            key={selected}
-            initial={reduced ? false : { opacity: 0.3, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduced ? 0 : 0.16 }}
-          >
-            <h2>{selected}</h2>
-            <div className={styles.evidenceList}>
-              {signals.map((signal) => (
-                <div key={signal.id} className={styles.evidenceItem}>
-                  <button
-                    aria-expanded={expanded === signal.id}
-                    aria-controls={`home-evidence-${signal.id}`}
-                    onClick={() =>
-                      setExpanded(expanded === signal.id ? null : signal.id)
-                    }
-                  >
-                    {signal.category === "asset" ? (
-                      <Image size={16} />
-                    ) : (
-                      <AlignLeft size={16} />
-                    )}
-                    <span>{signal.name}</span>
-                    <ChevronDown size={15} />
-                  </button>
-                  <div
-                    id={`home-evidence-${signal.id}`}
-                    hidden={expanded !== signal.id}
-                    className={styles.evidenceExplanation}
-                  >
-                    <p>
-                      {signal.category === "asset"
-                        ? "The example domains share a banner image. Licensed imagery or a shared template could also explain the match."
-                        : "The example domains use matching returns-policy text. Common templates could also explain a match."}
-                    </p>
-                    <span>Synthetic source · {signal.id}</span>
-                  </div>
+        <div>
+          <h2>{selected}</h2>
+          <div className={styles.evidenceList}>
+            {signals.map((signal) => (
+              <div key={signal.id} className={styles.evidenceItem}>
+                <button
+                  aria-expanded={expanded === signal.id}
+                  aria-controls={`home-evidence-${signal.id}`}
+                  onClick={() =>
+                    setExpanded(expanded === signal.id ? null : signal.id)
+                  }
+                >
+                  {signal.category === "asset" ? (
+                    <Image size={16} />
+                  ) : (
+                    <AlignLeft size={16} />
+                  )}
+                  <span>{signal.name}</span>
+                  <ChevronDown size={15} />
+                </button>
+                <div
+                  id={`home-evidence-${signal.id}`}
+                  hidden={expanded !== signal.id}
+                  className={styles.evidenceExplanation}
+                >
+                  <p>
+                    {signal.category === "asset"
+                      ? "The example domains share a banner image. Licensed imagery or a shared template could also explain the match."
+                      : "The example domains use matching returns-policy text. Common templates could also explain a match."}
+                  </p>
+                  <span>Synthetic source · {signal.id}</span>
                 </div>
-              ))}
-            </div>
-          </m.div>
-        </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className={styles.evidenceFooter}>
           <p>Shared content does not establish ownership.</p>
           <button
             disabled={loading}
-            onClick={() => void investigate(subject)}
-            aria-label="View example report"
+            onClick={async () => {
+              if (!(await investigate(subject)))
+                document.getElementById("domain")?.focus();
+            }}
+            aria-label={
+              loading
+                ? "View example report — opening example"
+                : "View example report"
+            }
+            aria-busy={loading}
           >
-            View example report <ArrowUpRight size={15} />
+            {loading ? "Opening example…" : "View example report"}{" "}
+            <ArrowUpRight size={15} />
           </button>
         </div>
         <span className="sr-only" role="status">
